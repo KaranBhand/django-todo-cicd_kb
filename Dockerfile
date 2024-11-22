@@ -5,24 +5,25 @@ FROM python:3.10
 RUN apt-get update && apt-get install -y python3-distutils python3-apt && apt-get clean
 
 # Set the working directory inside the container
-WORKDIR /source
+WORKDIR /app
 
 # Copy the requirements files first (this will benefit from Docker cache)
-COPY requirements.txt requirements-dev.txt /source/
+
+
+COPY requirements.txt /app/
 
 # Install pip and dependencies
 RUN pip install --upgrade pip
-RUN pip install -r requirements.txt || true
-RUN pip install -r requirements-dev.txt || true
+RUN pip install -r requirements.txt
 
 # Now copy the rest of the application files into the container
-COPY . /source/
+COPY . .
 
 # Run database migrations
-RUN python /source/manage.py migrate
+RUN python manage.py migrate
 
 # Expose the application port
 EXPOSE 8000
 
 # Start the Django development server
-CMD ["python", "/source/manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
