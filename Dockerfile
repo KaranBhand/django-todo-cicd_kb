@@ -7,8 +7,8 @@ RUN apt-get update && apt-get install -y python3-distutils python3-apt && apt-ge
 # Set the working directory inside the container
 WORKDIR /source
 
-# Copy application files into the container (excluding unnecessary files with .dockerignore)
-COPY . .
+# Copy application files into the container
+COPY . /source
 
 # Install Django and dependencies
 RUN pip install --upgrade pip
@@ -17,10 +17,10 @@ RUN pip install -r requirements.txt || true
 RUN pip install -r requirements-dev.txt || true
 
 # Run database migrations
-RUN python manage.py migrate
+RUN python /source/manage.py migrate
 
 # Expose the application port
 EXPOSE 8000
 
 # Start the Django development server
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["python", "/source/manage.py", "runserver", "0.0.0.0:8000"]
