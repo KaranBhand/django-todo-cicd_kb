@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install -y python3-distutils python3-apt && apt-ge
 WORKDIR /source
 
 # Copy application files into the container
-COPY . /source
+COPY .
 
 # Install Django and dependencies
 RUN pip install --upgrade pip
